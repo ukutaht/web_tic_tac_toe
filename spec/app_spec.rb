@@ -45,4 +45,30 @@ describe App do
       end
     end
   end
+
+  describe 'playing a game' do
+    before do
+      params = JSON.generate(game_type: "human_vs_human", board_size: "3")
+      request.post('/start_game', params: params) 
+    end
+
+    it 'responds with a board where move is made' do
+      response = request.post('/make_move', params: JSON.generate(move: "0") )
+      board = JSON.parse(response.body)["board"]
+      expect(board[0]).to eq "X"
+    end
+
+    it 'can tell when game is over' do
+      ["0", "3", "1"].each do |move|
+        request.post('/make_move', params: JSON.generate(move: move ))
+      end
+      res = request.post('/make_move', params: JSON.generate(move: "4" ))
+      winner = JSON.parse(res.body)["winner"]
+      expect(winner).to be_nil
+
+      res = request.post('/make_move', params: JSON.generate(move: "2" ))
+      winner = JSON.parse(res.body)["winner"]
+      expect(winner).to eq "X"
+    end
+  end
 end
