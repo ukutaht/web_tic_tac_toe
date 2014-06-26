@@ -5,12 +5,13 @@ require 'json'
 class App
   def call(env)
     request = Rack::Request.new(env)
-    request_body = JSON.parse(request.body.read.to_s)
     case request.path
     when '/start_game'
-      start_game(request_body)
+      start_game(request.params)
     when '/make_move'
-      make_move(request_body)
+      make_move(request.params)
+    when '/'
+      serve_root
     end
   end
 
@@ -41,5 +42,9 @@ class App
     response.body = [JSON.generate(hash)]
     response.status = 200
     response.finish
+  end
+
+  def serve_root
+    [200, {'Content-Type'  => 'text/html'}, File.open('public/index.html', File::RDONLY)]
   end
 end
