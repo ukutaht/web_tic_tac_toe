@@ -6,7 +6,7 @@ describe App do
 
   describe 'starting a game' do
     context 'default settings' do
-      let(:post_params) { JSON.generate(game_type: "human_vs_human", board_size: "3") }
+      let(:post_params) { {game_type: "human_vs_human", board_size: "3"} }
       let(:response) { request.post('/start_game', params: post_params) }
 
       it 'returns empty board' do
@@ -26,7 +26,7 @@ describe App do
     end
 
     context 'computer vs human with 4x4' do
-      let(:post_params) { JSON.generate(game_type: "computer_goes_first", board_size: "4") }
+      let(:post_params) { {game_type: "computer_goes_first", board_size: "4"} }
       let(:response) { request.post('/start_game', params: post_params) }
 
       it 'returns empty board' do
@@ -48,7 +48,7 @@ describe App do
 
   describe 'playing a game' do
     before do
-      params = JSON.generate(game_type: "human_vs_human", board_size: "3")
+      params = {game_type: "human_vs_human", board_size: "3"}
       request.post('/start_game', params: params) 
     end
 
@@ -60,13 +60,13 @@ describe App do
 
     it 'can tell when game is over' do
       ["0", "3", "1"].each do |move|
-        request.post('/make_move', params: JSON.generate(move: move ))
+        request.post('/make_move', params: {move: move })
       end
-      res = request.post('/make_move', params: JSON.generate(move: "4" ))
+      res = request.post('/make_move', params: {move: "4" })
       winner = JSON.parse(res.body)["winner"]
       expect(winner).to be_nil
 
-      res = request.post('/make_move', params: JSON.generate(move: "2" ))
+      res = request.post('/make_move', params: {move: "2" })
       winner = JSON.parse(res.body)["winner"]
       expect(winner).to eq "X"
     end

@@ -16,12 +16,13 @@ class App
   end
 
   def start_game(params)
-    @game = TicTacToe::Core::Game.from_hash(opts)
+    @game = TicTacToe::Core::Game.from_hash(params)
     send_game(@game)
   end
 
   def make_move(params)
-    @game.play_next_move(params['move'].to_i)
+    move = params['move'].empty? ? nil : params['move'].to_i
+    @game.play_next_move(move)
     send_game(@game)
   end
 

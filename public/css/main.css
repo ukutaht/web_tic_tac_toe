@@ -59,3 +59,59 @@ body {
 .clearfix {
     *zoom: 1;
 }
+.game-container {
+  margin-top: 17px;
+  position: relative;
+  padding: 10px;
+  cursor: default;
+  -webkit-touch-callout: none;
+  -ms-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -ms-touch-action: none;
+  touch-action: none;
+  background: #bbada0;
+  border-radius: 6px;
+  width: 280px;
+  height: 280px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+
+.grid-container {
+  position: absolute;
+  z-index: 1; 
+}
+
+.grid-row {
+  margin-bottom: 10px; }
+
+.grid-row:last-child {
+  margin-bottom: 0; 
+}
+
+.grid-row:after {
+  content: "";
+  display: block;
+  clear: both; 
+}
+
+.grid-cell {
+  width: 80px;
+  height: 80px;
+  margin-right: 10px;
+  float: left;
+  border-radius: 3px;
+  background: rgba(238, 228, 218, 0.35);
+  font-size: 55px;
+  line-height: 80px;
+  text-align: center;
+}
+
+.grid-cell:last-child {
+  margin-right: 0;
+}
+
