@@ -16,7 +16,7 @@ class App
   end
 
   def start_game(params)
-    @game = game_from(params)
+    @game = TicTacToe::Core::Game.from_hash(opts)
     send_game(@game)
   end
 
@@ -30,10 +30,6 @@ class App
                  current_player: game.current_player.mark,
                  winner: game.winner,
                  player_type: game.current_player.human? ? 'human' : 'computer')
-  end
-
-  def game_from(opts)
-    TicTacToe::Core::Game.from_hash(opts)
   end
 
   def respond_with(hash)
