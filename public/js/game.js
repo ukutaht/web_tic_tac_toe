@@ -29,6 +29,9 @@ Game.prototype.makeMove = function(index){
     that.winner = response.winner;
     that.currentPlayerType = response.player_type;
     that.draw()
+    if(that.currentPlayerType == 'computer'){
+      that.makeMove(null);
+    }
   });
 }
 
@@ -49,5 +52,4 @@ Game.prototype.bindEvents = function(){
     that.makeMove($(e.target).data('index')); 
   })
 
-  window.setInterval(function(){that.makeMove(null)}, 100)
 }
