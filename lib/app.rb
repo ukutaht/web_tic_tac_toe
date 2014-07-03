@@ -30,6 +30,7 @@ class App
     respond_with(board: game.board_string.chars.to_a,
                  current_player: game.current_player.mark,
                  winner: game.winner,
+                 over: game.over?,
                  player_type: game.current_player.human? ? 'human' : 'computer')
   end
 
