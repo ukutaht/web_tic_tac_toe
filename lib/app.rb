@@ -7,8 +7,10 @@ class App
     request = Rack::Request.new(env)
     case request.path
     when '/start_game'
+      @lock = false
       start_game(request.params)
     when '/make_move'
+      return teapot_response if @lock
       make_move(request.params)
     when '/'
       serve_root
@@ -21,8 +23,10 @@ class App
   end
 
   def make_move(params)
-    move = params['move'].empty? ? nil : params['move'].to_i
-    @game.play_next_move(move)
+    with_lock do
+      move = params['move'].empty? ? nil : params['move'].to_i
+      @game.play_next_move(move)
+    end
     send_game(@game)
   end
 
@@ -40,6 +44,16 @@ class App
     response.body = [JSON.generate(hash)]
     response.status = 200
     response.finish
+  end
+
+  def with_lock
+    @lock = true
+    yield
+    @lock = false
+  end
+
+  def teapot_response
+    [418, {'Content-Type'  => 'text/plain'}, ["Fuck it, we'll do it live"]]
   end
 
   def serve_root

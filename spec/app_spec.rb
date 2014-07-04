@@ -53,7 +53,7 @@ describe App do
     end
 
     it 'responds with a board where move is made' do
-      response = request.post('/make_move', params: JSON.generate(move: "0") )
+      response = request.post('/make_move', params: { move: "0" })
       board = JSON.parse(response.body)["board"]
       expect(board[0]).to eq "X"
     end

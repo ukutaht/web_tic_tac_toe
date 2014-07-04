@@ -3,7 +3,8 @@ $(function(){
     e.preventDefault();
     var data = $(this).serialize();
     $.post('/start_game', data, function(response){
-      new Game(response); 
+      game = new Game(response); 
+      game.bindEvents(); 
     })
   })
 })
