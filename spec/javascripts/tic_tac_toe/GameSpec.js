@@ -1,78 +1,61 @@
 describe('game', function(){
   var game;
+  var fakeBackend = jasmine.createSpyObj('fakeBackend', ['postMove', 'startGame'])
+  var fakeRenderer = jasmine.createSpyObj('fakeRenderer', ['draw'])
+  var fakeBoardElement = jasmine.createSpyObj('fakeBoardElement', ['on'])
 
 
   beforeEach(function(){
     game = new Game({
-      board: [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-      current_player: "X",
-      player_type: "human",
-      winner: null,
-      over: false
+      backend: fakeBackend,
+      renderer: fakeRenderer,
+      boardElement: fakeBoardElement
     });
   })
 
-  it('updates its attributes', function(){
-    var fakeResponse = {
-      board: ["X", "X", "X", " ", " ", " ", " ", " ", " "],
-      current_player: "O",
-      player_type: "human",
-      winner: "X",
-      over: true
-    };
-
-    game.update(fakeResponse);
-
-    expect(game.board[0]).toEqual("X")
-    expect(game.currentPlayer).toEqual("O")
-    expect(game.currentPlayerType).toEqual("human")
-    expect(game.winner).toEqual("X")
-    expect(game.over).toBe(true)
+  it('start itself by posting to server', function(){
+    var formData = {game_type: 'blah', board_size: 'blahblah'}
+    game.start(formData)
+    expect(fakeBackend.startGame).toHaveBeenCalledWith(formData, game, game.update);
   })
 
-  it('draws nine cells', function(){
-    var fakeResponse = {
-      board: [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    };
-    game.update(fakeResponse);
-    var boardMarkup = $(game.draw());
-
-    var cells = boardMarkup.find('.grid-cell')
-    expect(cells.length).toEqual(9);
+  it('binds events when starting', function(){
+    game.start({}) 
+    expect(fakeBoardElement.on).toHaveBeenCalled()
   })
 
-  it('draws three rows for nine cells', function(){
-    var fakeResponse = {
-      board: [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    };
-    game.update(fakeResponse);
-    var boardMarkup = $(game.draw());
-
-    var rows = boardMarkup.find('.grid-row')
-    expect(rows.length).toEqual(3);
+  it('posts moves to server', function(){
+    game.makeMove(0);
+    expect(fakeBackend.postMove).toHaveBeenCalledWith(0, game, game.update);
   })
 
-  it('draws marks', function(){
+  it('updates board from response', function(){
     var fakeResponse = {
       board: [" ", " ", "X", " ", " ", " ", " ", " ", " "],
     };
-    game.update(fakeResponse);
-    var boardMarkup = $(game.draw());
 
-    var cells = boardMarkup.find('.grid-cell')
-    expect(cells[2].firstElementChild.textContent).toEqual("X")
+    game.update(fakeResponse);
+    expect(game.board[2]).toEqual('X')
   })
 
-  it('can draw sixteen cells',function(){
+  it('draws the new board on update', function(){
     var fakeResponse = {
-      board: [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "]
+      board: ["X", "X", "X", " ", " ", " ", " ", " ", " "],
     };
+
+    fakeRenderer.draw.calls.reset()
     game.update(fakeResponse);
+    expect(fakeRenderer.draw).toHaveBeenCalledWith(fakeResponse.board, game.boardElement)
+  })
 
-    var boardMarkup = $(game.draw());
+  it('makes computer move if computer turn on update', function(){
+    var fakeResponse = {
+      player_type: 'computer'
+    };
 
-    var cells = boardMarkup.find('.grid-cell')
-    expect(cells.length).toEqual(16);
+    spyOn(game, 'makeMove')
+    game.update(fakeResponse);
+    expect(game.makeMove).toHaveBeenCalled
   })
 
 })

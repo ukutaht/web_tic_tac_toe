@@ -53,7 +53,7 @@ class App
   end
 
   def teapot_response
-    [418, {'Content-Type'  => 'text/plain'}, ["Fuck it, we'll do it live"]]
+    [418, {'Content-Type'  => 'text/plain'}, ["418 - I'm a teapot"]]
   end
 
   def serve_root
