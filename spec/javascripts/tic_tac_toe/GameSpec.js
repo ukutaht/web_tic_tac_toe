@@ -4,7 +4,6 @@ describe('game', function(){
   var fakeRenderer = jasmine.createSpyObj('fakeRenderer', ['draw'])
   var fakeBoardElement = jasmine.createSpyObj('fakeBoardElement', ['on'])
 
-
   beforeEach(function(){
     game = new Game({
       backend: fakeBackend,
@@ -57,5 +56,4 @@ describe('game', function(){
     game.update(fakeResponse);
     expect(game.makeMove).toHaveBeenCalled
   })
-
 })

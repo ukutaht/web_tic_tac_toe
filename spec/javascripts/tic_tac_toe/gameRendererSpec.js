@@ -14,7 +14,7 @@ describe('gameRenderer', function(){
     expect(boardMarkup.length).toEqual(3);
   })
 
-  it('generates marks', function(){
+  it('has player marks in generated markup', function(){
     var board = [" ", " ", "X", " ", " ", " ", " ", " ", " "]
     var boardMarkup = $(GameRenderer.markupFor(board));
 

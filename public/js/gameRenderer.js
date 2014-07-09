@@ -1,4 +1,4 @@
-function GameRenderer(){}
+GameRenderer = {}
 
 GameRenderer.rowTemplate = "<div class='grid-row'> <% cells.forEach(function(mark, index){ %> <div class='grid-cell' data-index='<%= row*size + index %>' > <span class='mark'><%= mark %></span> </div> <% }) %> </div>";
 
