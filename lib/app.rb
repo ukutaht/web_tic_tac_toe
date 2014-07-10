@@ -35,6 +35,7 @@ class App
                  current_player: game.current_player.mark,
                  winner: game.winner,
                  over: game.over?,
+                 winning_row: game.board.winning_row,
                  player_type: game.current_player.human? ? 'human' : 'computer')
   end
 

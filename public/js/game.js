@@ -47,6 +47,7 @@ Game.prototype.updateAttributes = function(response){
   this.currentPlayerType = response.player_type;
   this.winner = response.winner;
   this.over = response.over;
+  this.winningRow = response.winning_row;
 }
 
 Game.prototype.bindEvents = function(){
